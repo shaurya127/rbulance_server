@@ -1,0 +1,84 @@
+.signup {
+  background-color: #af7a7a;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+}
+.home{
+  background-color: #af7a7a;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+}
+.login {
+  background-color: #af7a7a;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+input {
+  border-bottom: 1px solid #af7a7a;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 50%;
+
+  margin-left: 25%;
+  border-radius: 5px;
+  font-size: 20px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  color: #af7a7a;
+}
+
+.btn {
+  background-color: #af7a7a;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 20px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 30%;
+  cursor: pointer;
+}
+
+.btn::-moz-focus-inner {
+  border: 0;
+}
+
+.btn:hover {
+  background-color: #191717;
+  color: white;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:active {
+  background-color: #191717;
+  color: white;
+}
+
+.btn:active:hover {
+  background-color: #191717;
+  color: white;
+}
+
+.btn:active:focus {
+  outline: none;
+}
