@@ -1,7 +1,11 @@
 const mongoose=require("mongoose");
 
 const connectDatabase=()=>{
-    mongoose.connect( process.env.DB_URI ,{
+    // mongoose.connect( process.env.DB_URI ,{
+    //     useNewUrlParser:true,
+    //     useUnifiedTopology:true,
+    // })
+    mongoose.connect("mongodb://localhost:27017/hospital" ,{
         useNewUrlParser:true,
         useUnifiedTopology:true,
     })

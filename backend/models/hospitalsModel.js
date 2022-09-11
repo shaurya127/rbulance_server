@@ -10,6 +10,10 @@ const hospitalSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please add address"],
   },
+  hospital_device_id: {
+    type: String,
+    required: [false, "Please add id"],
+  },
   location: {
     type: {
       type: String,
@@ -27,10 +31,9 @@ const hospitalSchema = new mongoose.Schema({
   },
 });
 hospitalSchema.pre("save", async function (next) {
-
   const location = await geocoder.geocode(this.address);
-//   console.log('location',location);
-  
+  //   console.log('location',location);
+
   this.location = {
     type: "Point",
     coordinates: [location[0].longitude, location[0].latitude],
