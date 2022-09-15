@@ -4,11 +4,13 @@ const {
   createHospital,
   findTheNearestHospital,
   findHospitalsInRadius,
-  acceptRequest
+  acceptRequest,
+  loginUser
 } = require("../controller/getLocation");
 const router = express.Router();
 
 router.route("/getHospitals").get(getHospitals).post(createHospital);
+router.route("/hospital-login").post(loginUser);
 
 router.route("/findTheNearestHospital").post(findTheNearestHospital);
 

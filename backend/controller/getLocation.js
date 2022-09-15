@@ -2,6 +2,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Hospitals = require("../models/hospitalsModel");
 const Requests = require("../models/requestsModel");
 const { sendNotification } = require("../firbase/firebaseAdmin.service");
+const sendToken = require("../utils/jwtToken");
 const geolib = require("geolib");
 
 let milesToRadian = function (miles) {
@@ -36,16 +37,36 @@ const getHospitals = catchAsyncErrors(async (req, res, next) => {
 
 const createHospital = catchAsyncErrors(async (req, res, next) => {
   const hospital = await Hospitals.create(req.body);
-  res.status(201).json({
-    status: "success",
-    hospital,
-  });
+  // res.status(201).json({
+  //   status: "success",
+  //   hospital,
+  // });
+  const token = hospital.getJWTToken();
+  sendToken(hospital, 201, res);
+});
+
+const loginUser = catchAsyncErrors(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return next(new ErrorHandler("Please provide email and password", 401));
+  }
+
+  const user = await Hospitals.findOne({ email }).select("+password");
+  if (!user) {
+    return next(new ErrorHandler("Invalid Credentials", 401));
+  }
+  const isMatch = await user.comparePassword(password);
+  if (!isMatch) {
+    return next(new ErrorHandler("Invalid Credentials", 401));
+  }
+  sendToken(user, 200, res);
 });
 
 const findTheNearestHospital = catchAsyncErrors(async (req, res, next) => {
   const { lat, lng } = req.body;
 
-  await Requests.create({ user: "631da67edfdba1a88f6a8a5f" });
+  const request = await Requests.create({ user: "631da67edfdba1a88f6a8a5f" });
   Hospitals.collection.createIndex({ location: "2dsphere" });
   const hospitals = await Hospitals.find({
     location: {
@@ -60,16 +81,18 @@ const findTheNearestHospital = catchAsyncErrors(async (req, res, next) => {
   //
   for (let i of hospitals) {
     const payload = {
-      token: i.device_id,
+      token: i.hospital_device_id,
+      // token:
+        // "cTF4jYajfE4Z-iv454wOlS:APA91bEouEVb0wYNddepRfXuzx4rPS3qpVVe4yF_gaXPuirhVTHHN_-vIxPlRo7GI3wckZuLLRQxnHQm77bN6VeLXBvzn9HYvI2Eq1b1Z9wO3C2DzbGjYPZxHNG1LTSAh45Z9Q8lAaqc",
       notification: {
-        title: `hello `,
-        body: `this is a test message`,
+        title: `New Request`,
+        body: request._id,
       },
     };
     // to send notification
     await sendNotification(payload);
-    //wait for some time 
-    await sleep(10000);
+    //wait for some time
+    await sleep(100000);
     // if request to accepted then again go to next hospital
     const check_request_accepted = await checkRequest();
     if (check_request_accepted) break;
@@ -111,9 +134,9 @@ const findHospitalsInRadius = catchAsyncErrors(async (req, res, next) => {
 });
 
 const acceptRequest = catchAsyncErrors(async (req, res, next) => {
-  const { request_Id, hospital_id } = req.body;
-  await Request.updateOne(
-    { _id: request_Id },
+  const { request_id, hospital_id } = req.body;
+  await Requests.updateOne(
+    { _id: request_id },
     {
       $set: {
         status: "accepted",
@@ -121,6 +144,10 @@ const acceptRequest = catchAsyncErrors(async (req, res, next) => {
       },
     }
   );
+  res.status(200).json({
+    status: "success",
+    message: "Accepted Successfully",
+  });
 });
 
 const sleep = (ms) => {
@@ -135,4 +162,5 @@ module.exports = {
   findTheNearestHospital,
   findHospitalsInRadius,
   acceptRequest,
+  loginUser,
 };
