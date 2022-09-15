@@ -15,7 +15,7 @@ const Login = () => {
     }
 
     // api call to check whether the user is registered
-    fetch("http://localhost:7000/api/v1/login", {
+    fetch("http://localhost:7000/api/v1/hospital-login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -30,6 +30,7 @@ const Login = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
+          localStorage.setItem("user",JSON.stringify(data))
           // if user is registered, redirect to home page
           if (data.success) {
             window.location.href = "/";

@@ -1,17 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import {
-Nav,
-NavLink,
-Bars,
-NavMenu,
-NavBtn,
-NavBtnLink,
-} from './NavbarElements';
-import About from './About';
-import PostForm from './PostForm';
+  Nav,
+  NavLink,
+  Bars,
+  NavMenu,
+  NavBtn,
+  NavBtnLink,
+} from "./NavbarElements";
+import About from "./About";
+import PostForm from "./PostForm";
+
 const Home = () => {
-
-
   useEffect(() => {
     fetch("http://localhost:7000/api/v1/me", {
       method: "GET",
@@ -27,30 +26,29 @@ const Home = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  return (
+    <>
+      <Nav>
+        <Bars />
 
-return (
-  <>
-  <Nav>
-    <Bars />
+        <NavMenu>
+          <NavLink to="/takelocation" activeStyle>
+            PostForm
+          </NavLink>
+          <NavLink to="/about" activeStyle>
+            About
+          </NavLink>
 
-    <NavMenu>
-    <NavLink to='/takelocation' activeStyle>
-      PostForm
-    </NavLink>
-    <NavLink to='/about' activeStyle>
-      About
-    </NavLink>
-   
-    <NavLink to='/register' activeStyle>
-      Sign Up
-    </NavLink>
-    </NavMenu>
-    <NavBtn>
-    <NavBtnLink to='/login'>Sign In</NavBtnLink>
-    </NavBtn>
-  </Nav>
-  </>
-);
+          <NavLink to="/register" activeStyle>
+            Sign Up
+          </NavLink>
+        </NavMenu>
+        <NavBtn>
+          <NavBtnLink to="/login">Sign In</NavBtnLink>
+        </NavBtn>
+      </Nav>
+    </>
+  );
 };
 
 export default Home;
